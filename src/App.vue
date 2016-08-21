@@ -42,7 +42,7 @@ header{
 .logo{
   width: 80px;
   height: 80px;
-  background: url(./assets/logo.png);
+  background: url(./assets/images/logo.png);
   cursor: pointer;
   float: left;
 }
