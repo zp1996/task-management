@@ -9,14 +9,19 @@
 		</div>
 		<div class="tab-content" v-for="item in items">
 			<div class="single-content" v-show="titles[$key] === active">
-				<p v-for="i in item">
-					{{i.content}}
+				<ul v-if="type(item)">
+					<li v-for="i in item">
+						{{i.content}}
+					</li>
+				</ul>
+				<p v-else class="no-data">
+					{{item}}
 				</p>
 			</div>
 		</div>
 	</div>
 </template>
-<script type="text/javascript">
+<script>
 
 export default{
 	data: () => {
@@ -25,13 +30,17 @@ export default{
 		};
 	},
 	methods: {
-		"change": function (event) {
+		change: function (event) {
 			var text = event.target.innerText;
 			if (text) {
 				if (text === this.active) 
 					return void 0;
 				this.active = text;
 			}
+		},
+		type: (obj) => {
+			console.log(obj[0], obj[0] instanceof Object);
+			return obj[0] instanceof Object;
 		}
 	},
 	props: ["titles", "active", "items"]
@@ -39,7 +48,7 @@ export default{
 
 </script>
 
-<style type="text/css">
+<style>
 	.tab-titles{
 		list-style-type: none;
 	}
@@ -75,5 +84,11 @@ export default{
 		to {
 			opacity: 1;
 		}
+	}
+	.no-data{
+		text-align: center;
+		line-height: 400px;
+		color: #aaa;
+		font-size: 20px;
 	}
 </style>

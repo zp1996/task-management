@@ -26,6 +26,8 @@
 *{
   margin: 0px;
   padding: 0px;
+  font-family: "Helvetica Neue", "Hiragino Sans GB", "Segoe UI", "Microsoft Yahei", "微软雅黑", Tahoma, Arial, STHeiti, sans-serif;
+  outline: none;
 }
 header{
   width: 100%;
@@ -66,6 +68,7 @@ header{
 .nav-link{
   color: #fff;
   text-decoration: none;
+  font-size: 14px;
 }
 .nav-link:hover{
   color: #316747;
