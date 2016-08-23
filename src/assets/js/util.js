@@ -9,36 +9,37 @@ const date = new Date(),
 
 export default {
 	read: (key, type) => {
-
 		key = key || today;
 		type = type || status;
-
 		const allData = JSON.parse(localStorage.getItem(key));
 		var res = {};
-
-		for (let key in type) 
-			res[key] = [];
-
+		for (let key in type) {
+			res[key] = {
+				data: {}
+			};
+		}
 		if (allData) {
 			allData.forEach(val => {
 				if (type.hasOwnProperty(val.status))
-					res[val.status].push(val);
+					res[val.status]['data'][val.id] = val;
 			});
 		}
 
 		for (let key in res) {
-			if (res[key].length === 0)
-				res[key].push(str);
+			if (Object.keys(res[key]).length === 0)
+				res[key]['data'] = [str];
+
 		}
 
 		return res;
 	},
 	add: (data) => {
-		var allData = JSON.parse(localStorage.getItem(today));
+		var allData = JSON.parse(localStorage.getItem(today));		
 		if (allData)
 			allData.push(data);
 		else
 			allData = [data];
+		
 		localStorage.setItem(today, JSON.stringify(allData));
 		return true;
 	}

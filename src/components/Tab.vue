@@ -9,9 +9,19 @@
 		</div>
 		<div class="tab-content" v-for="item in items">
 			<div class="single-content" v-show="titles[$key] === active">
-				<ul v-if="type(item)">
-					<li v-for="i in item">
-						{{i.content}}
+				<ul v-if="type(item.data)" class="items">
+					<li v-for="i in item.data" class="single-item">
+						<span class="item-content">
+							{{i.content}}{{i.id}}
+						</span>
+						<span class="item-time">
+							耗时：{{i.time}}小时
+						</span>
+						<span class="handle-area" v-show="item.handles">
+							<button v-for="handle in item.handles" class="{{$key}}">
+								{{handle}}
+							</button>
+						</span>
 					</li>
 				</ul>
 				<p v-else class="no-data">
@@ -22,7 +32,6 @@
 	</div>
 </template>
 <script>
-
 export default{
 	data: () => {
 		return {
@@ -31,6 +40,7 @@ export default{
 	},
 	methods: {
 		change: function (event) {
+			console.log(this.items[0]);
 			var text = event.target.innerText;
 			if (text) {
 				if (text === this.active) 
@@ -39,56 +49,92 @@ export default{
 			}
 		},
 		type: (obj) => {
-			console.log(obj[0], obj[0] instanceof Object);
-			return obj[0] instanceof Object;
+			console.log(obj);
+			return obj.toString() === "[object Object]";
 		}
 	},
-	props: ["titles", "active", "items"]
+	props: ["titles", "active", "items", "handles"]
 };
-
 </script>
 
 <style>
-	.tab-titles{
-		list-style-type: none;
+.tab-titles{
+	list-style-type: none;
+}
+.titles{
+	height: 40px;
+}
+.tab-title{
+	float: left;
+	width: 100px;
+	height: 40px;
+	background: #aaa;
+	cursor: pointer;
+	line-height: 40px;
+	text-align: center;
+	margin-right: 5px;
+	border-radius: 8px 8px 0px 0px;
+	border-bottom: 1px solid #aaa;
+	color: #fff;
+}
+.single-content{
+	min-height: 400px;
+	background: #e8e6e6;
+	clear: both;
+	animation: show 1.5s;
+}
+.active{
+	background: #2e8ded;
+	border-bottom: 1px solid #2e8ded;
+}
+.items{
+	list-style-type: none;
+	padding: 30px 50px;
+}
+.single-item{
+	height: 30px;
+	line-height: 30px;
+	padding: 0px 10px;
+	border: 1px solid #fff;
+	margin-top: -1px;
+}
+.item-content{
+	display: inline-block;
+	width: 65%;
+}
+.item-time{
+	font-size: 13px;
+	color: #666;
+	display: inline-block;
+	width: 120px;
+}
+@keyframes show{
+	from {
+		opacity: 0;
 	}
-	.titles{
-		height: 40px;
+	to {
+		opacity: 1;
 	}
-	.tab-title{
-		float: left;
-		width: 100px;
-		height: 40px;
-		background: #aaa;
-		cursor: pointer;
-		line-height: 40px;
-		text-align: center;
-		margin-right: 5px;
-		border-radius: 8px 8px 0px 0px;
-		border-bottom: 1px solid #000;
-		color: #fff;
-	}
-	.single-content{
-		height: 400px;
-		background: #e8e6e6;
-		clear: both;
-		animation: show 1.5s;
-	}
-	.active{
-		background: blue;
-	}
-	@keyframes show{
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-	.no-data{
-		text-align: center;
-		line-height: 400px;
-		color: #aaa;
-		font-size: 20px;
-	}
+}
+.no-data{
+	text-align: center;
+	line-height: 400px;
+	color: #aaa;
+	font-size: 20px;
+}
+.handle-area button{
+	margin: 0px 10px;
+	padding: 2px 10px;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+.finish, .start{
+	background: #2e8ded;
+	color: #fff;
+}
+.del{
+	background: #aaa;
+	color: #fff;
+}
 </style>
