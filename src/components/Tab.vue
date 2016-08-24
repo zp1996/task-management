@@ -38,7 +38,13 @@ const handlesObj = {
 	del: (id) => {
 		Data.tabData.delTask(id);
 	},
-}
+	start: (id) => {
+		Data.tabData.startTask(id);
+	},
+	finish: (id) => {
+		Data.tabData.finishTask(id);
+	}
+};
 export default{
 	data: () => {
 		return {

@@ -7,6 +7,12 @@ const date = new Date(),
 	today = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
 	str = "暂时无该类型数据";
 
+function BaseFn (fn, ...item) {
+	var allData = JSON.parse(localStorage.getItem(today));
+	fn.apply(allData, item);
+	localStorage.setItem(today, JSON.stringify(allData));
+}
+
 export default {
 	read: (key, type) => {
 		key = key || today;
@@ -35,16 +41,23 @@ export default {
 		var allData = JSON.parse(localStorage.getItem(today));		
 		allData = allData || Object.create(null);
 		allData[id] = data;
-		console.log(allData);
 		localStorage.setItem(today, JSON.stringify(allData));
 		return true;
 	},
 	del: (id) => {
-		var allData = JSON.parse(localStorage.getItem(today));
-		delete allData[id];
-		localStorage.setItem(today, JSON.stringify(allData));			
+		BaseFn(function (id) {
+			delete this[id];
+		}, id);		
 	},
 	get: (id) => {
 		return JSON.parse(localStorage.getItem(today))[id];
+	},
+	update: (id, key, val) => {
+		BaseFn(function (id, key, val) {
+			if (typeof key === "string")
+				this[id][key] = val;
+			else 	
+				this[id] = data;
+		}, id, key, val);	
 	}
 }
