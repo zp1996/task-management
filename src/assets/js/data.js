@@ -1,4 +1,5 @@
 import Util from "./util.js";
+import Vue from "vue";
 
 const status = ["未完成", "进行中", "已完成"],
 	handles = [
@@ -20,7 +21,6 @@ var tabData = {
 status.forEach((val, i) => {
 	tabData.title.push(val);
 });
-// localStorage.clear();
 
 tabData.tasks = Util.read();
 
@@ -31,13 +31,18 @@ for (let key in tabData.tasks) {
 tabData.pushTask = function (data) {
 	var status = data.status,
 		id = +new Date();
-	if (typeof tabData.tasks[status][0] === "string") {
-		tabData.tasks[status] = {}; 
+	if (Array.isArray(tabData.tasks[status]['data'])) {
+		tabData.tasks[status]['data'] = Object.create(null); 
 	}
-	tabData.tasks[status][id] = data;
-	tabData.tasks[status].handles = handles[status];
-	Util.add(data);
+	tabData.tasks[status]['data'][id] = data;
+	Util.add(data, id);
 	return true;
+};
+tabData.delTask = function (id) {
+	var data = Util.get(id),
+		status = data.status;
+	Vue.delete(tabData.tasks[status]['data'], id);
+	Util.del(id);
 };
 
 export default {

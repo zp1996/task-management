@@ -8,16 +8,16 @@
 			</ul>
 		</div>
 		<div class="tab-content" v-for="item in items">
-			<div class="single-content" v-show="titles[$key] === active">
+			<div class="single-content" v-show="titles[$key] === active" v-on:click="changestatus">
 				<ul v-if="type(item.data)" class="items">
 					<li v-for="i in item.data" class="single-item">
 						<span class="item-content">
-							{{i.content}}{{i.id}}
+							{{i.content}}
 						</span>
 						<span class="item-time">
 							耗时：{{i.time}}小时
 						</span>
-						<span class="handle-area" v-show="item.handles">
+						<span class="handle-area" v-show="item.handles" data-index="{{$key}}">
 							<button v-for="handle in item.handles" class="{{$key}}">
 								{{handle}}
 							</button>
@@ -25,13 +25,20 @@
 					</li>
 				</ul>
 				<p v-else class="no-data">
-					{{item}}
+					{{item.data}}
 				</p>
 			</div>
 		</div>
 	</div>
 </template>
 <script>
+import Data from "../assets/js/data";
+
+const handlesObj = {
+	del: (id) => {
+		Data.tabData.delTask(id);
+	},
+}
 export default{
 	data: () => {
 		return {
@@ -40,7 +47,6 @@ export default{
 	},
 	methods: {
 		change: function (event) {
-			console.log(this.items[0]);
 			var text = event.target.innerText;
 			if (text) {
 				if (text === this.active) 
@@ -49,8 +55,11 @@ export default{
 			}
 		},
 		type: (obj) => {
-			console.log(obj);
-			return obj.toString() === "[object Object]";
+			return Object.prototype.toString.call(obj) === "[object Object]";
+		},
+		changestatus: (event) => {
+			var className = event.target && event.target.className;
+			handlesObj[className] && handlesObj[className](event.target.parentNode.getAttribute("data-index"));
 		}
 	},
 	props: ["titles", "active", "items", "handles"]
